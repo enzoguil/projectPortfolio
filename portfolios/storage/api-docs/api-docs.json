@@ -1,0 +1,278 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Portfolio",
+        "description": "Documentation de l'API pour le portfolio",
+        "contact": {
+            "email": "votre-email@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Lister tous les projets",
+                "operationId": "2ea4919d0a733012d5e30a9c60233aca",
+                "responses": {
+                    "200": {
+                        "description": "Liste des projets",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projects/{id}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Afficher les détails d'un projet",
+                "operationId": "33c3368c9b2408f1a656a8aadf0ffb1e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du projet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du projet",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Projet non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/quotes": {
+            "post": {
+                "tags": [
+                    "Quotes"
+                ],
+                "summary": "Créer une demande de devis",
+                "operationId": "f359ad738bf206801f2868865dae5011",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Je souhaite un devis pour un site web."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Demande de devis créée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Demande de devis créée avec succès."
+                                        },
+                                        "quote": {
+                                            "$ref": "#/components/schemas/Quote"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les données fournies ne sont pas valides."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/services": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Lister tous les services",
+                "operationId": "7cb57dfc3dc68b14a0f32724289e41ab",
+                "responses": {
+                    "200": {
+                        "description": "Liste des services",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Service"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Quote": {
+                "title": "Quote",
+                "description": "Représentation d'une demande de devis",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Je souhaite un devis pour un site web."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-05-01T12:34:56Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-05-01T12:34:56Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Project": {
+                "title": "Project",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Portfolio"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Un projet de portfolio pour présenter mes compétences."
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "images/portfolio.png"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "title": "Service",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Développement Web"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Création de sites web modernes et responsives."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "Endpoints pour gérer les projets"
+        },
+        {
+            "name": "Services",
+            "description": "Endpoints pour gérer les services"
+        },
+        {
+            "name": "Quotes",
+            "description": "Quotes"
+        }
+    ]
+}

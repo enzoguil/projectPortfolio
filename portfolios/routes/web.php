@@ -8,24 +8,31 @@ Route::get('/backoffice', function () {
     return view('welcome');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/projects', [HomeController::class, 'projects'])->name('projects');
-Route::get('/projects/{id}', [HomeController::class, 'show'])->name('projects.show');
-Route::get('/skills', [HomeController::class, 'skills'])->name('skills');
+Route::get('/portfolio/{userId}', [HomeController::class, 'index'])->name('home');
+Route::get('/portfolio/{userId}/projects', [HomeController::class, 'projects'])->name('projects');
+Route::get('/portfolio/{userId}/projects/{id}', [HomeController::class, 'show'])->name('projects.show');
+Route::get('/portfolio/{userId}/skills', [HomeController::class, 'skills'])->name('skills');
 
 Route::get('/backoffice/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\AdminController;
 
 // Routes pour le back-office des projets
-Route::prefix('backoffice')->group(function () {
-    Route::get('/projects', [ProjectController::class, 'index'])->middleware(['auth', 'verified'])->name('projects.index'); // Liste des projets
-    Route::post('/projects', [ProjectController::class, 'store'])->middleware(['auth', 'verified'])->name('projects.store'); // Ajouter un projet
-    Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth', 'verified'])->name('projects.edit'); // Modifier un projet
-    Route::put('/projects/{id}', [ProjectController::class, 'update'])->middleware(['auth', 'verified'])->name('projects.update'); // Mettre à jour un projet
-    Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->middleware(['auth', 'verified'])->name('projects.destroy'); // Supprimer un projet
+Route::middleware(['auth'])->prefix('backoffice')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('backoffice.dashboard');
+    Route::resource('projects', ProjectController::class);
+    Route::resource('services', ServiceController::class);
+    Route::get('/statistics', [AdminController::class, 'statistics'])->name('backoffice.statistics');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::post('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store'); // Ajouter un projet
+    Route::get('/projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit'); // Modifier un projet
+    Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('projects.update'); // Mettre à jour un projet
+    Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy'); // Supprimer un projet
 });
 
 Route::middleware('auth')->group(function () {
