@@ -11,9 +11,20 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = auth()->user()->projects()->paginate(10); // Pagination
+        $query = auth()->user()->projects();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $projects = $query->paginate(10);
+
         return view('backoffice.projects.index', compact('projects'));
     }
 

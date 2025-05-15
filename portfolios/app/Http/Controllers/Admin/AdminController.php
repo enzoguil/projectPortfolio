@@ -19,7 +19,9 @@ class AdminController extends Controller
 
     public function updateSettings(Request $request)
     {
-        foreach ($request->all() as $key => $value) {
+        $data = $request->except('_token');
+
+        foreach ($data as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
@@ -28,7 +30,11 @@ class AdminController extends Controller
 
     public function statistics()
     {
-        $statistics = VisitorStatistic::selectRaw('DATE(visited_at) as date, COUNT(*) as visits')
+        $user = auth()->user();
+
+        // On suppose que la table visitor_statistics a une colonne user_id
+        $statistics = \App\Models\VisitorStatistic::where('user_id', $user->id)
+            ->selectRaw('DATE(visited_at) as date, COUNT(*) as visits')
             ->groupBy('date')
             ->orderBy('date', 'desc')
             ->get();
@@ -42,6 +48,6 @@ class AdminController extends Controller
         $totalProjects = Project::count();
         $totalServices = Service::count();
 
-        return view('backoffice.dashboard', compact('totalVisitors', 'totalProjects', 'totalServices'));
+        return view('dashboard', compact('totalVisitors', 'totalProjects', 'totalServices'));
     }
 }

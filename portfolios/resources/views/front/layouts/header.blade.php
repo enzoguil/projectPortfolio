@@ -8,7 +8,7 @@
                 <a href="{{ url('/portfolio/'.$user['id'].'/projects') }}" class="text-white hover:text-gray-400">Projets</a>
             </li>
             <li class="btn">
-                <a href="{{ url('/portfolio/'.$user['id'].'/skills') }}" class="text-white hover:text-gray-400">Compétences</a>
+                <a href="{{ url('/portfolio/'.$user['id'].'/services') }}" class="text-white hover:text-gray-400">Services</a>
             </li>
         </ul>
     </nav>

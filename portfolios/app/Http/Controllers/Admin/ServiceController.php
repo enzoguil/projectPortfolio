@@ -11,9 +11,21 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::paginate(10);
+
+        $query = auth()->user()->services();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $services = $query->paginate(10);
+
         return view('backoffice.services.index', compact('services'));
     }
 
@@ -22,7 +34,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('backoffice.services.create');
+        $user = auth()->user();
+        return view('backoffice.services.create', compact('user'));
     }
 
     /**
@@ -33,6 +46,8 @@ class ServiceController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'nullable|numeric',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         Service::create($request->all());
@@ -52,7 +67,8 @@ class ServiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+        return view('backoffice.services.edit', compact('service'));
     }
 
     /**
@@ -60,7 +76,16 @@ class ServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'nullable|numeric',
+        ]);
+
+        $service = Service::findOrFail($id);
+        $service->update($request->all());
+
+        return redirect()->route('services.index')->with('success', 'Service mis à jour avec succès.');
     }
 
     /**
@@ -68,6 +93,9 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+        $service->delete();
+
+        return redirect()->route('services.index')->with('success', 'Service supprimé avec succès.');
     }
 }

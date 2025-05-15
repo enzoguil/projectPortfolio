@@ -1,14 +1,14 @@
 {{-- filepath: d:\mydigitalschool\B3\Cours\framework php\portfolio\resources\views\front\home.blade.php --}}
 @extends('front.layouts.app')
 
-@section('title', 'Accueil - Enzo Guillemet')
+@section('title', 'Accueil - ' . $user['name'])
 
 @section('content')
 
 <div id="centre" class="p-6 text-white bg-gray-900">
     <h1 class="titre text-center text-4xl font-bold mb-6">{{ $user['name'] }}</h1>
     <p class="text-lg leading-relaxed mb-6">
-        {{ $user['description'] }}
+        {!!$user['description']!!}
     </p>
     <h3 class="text-2xl font-semibold mt-8 mb-4">Quelques projets</h3>
     <div id="last_projects" class="flex flex-wrap w-full">
@@ -17,7 +17,7 @@
                 <div class="txt bg-gray-900 bg-opacity-75 rounded-lg p-5">
                     <h4 class="text-xl font-bold">{{ $project['title'] }}</h4>
                     <p class="text-sm">
-                        {{ $project['description'] }}
+                        {!!$project['description']!!}
                     </p>
                 </div>
             </a>

@@ -24,6 +24,12 @@
         </div>
 
         <div>
+            <x-input-label for="description" :value="__('Description')" />
+            <textarea id="description" name="description" type="text" class="mt-1 block w-full">{{$user->description}}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('description')" />
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -62,3 +68,15 @@
         </div>
     </form>
 </section>
+<script src="https://cdn.tiny.cloud/1/2s85t90wlwd4owf99nbsjs3is1m0qt6ei3rxa4fs6g2wm286/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+        menubar: false,
+        skin: 'fabric',
+        plugins: 'lists',
+        toolbar: [
+            'undo redo | styles | bold italic | link image alignleft aligncenter alignright numlist bullist',
+        ]
+    });
+</script>

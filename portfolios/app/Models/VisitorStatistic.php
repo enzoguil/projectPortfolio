@@ -8,5 +8,5 @@ class VisitorStatistic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ip_address', 'url', 'visited_at'];
+    protected $fillable = ['ip_address', 'url', 'visited_at', 'user_id'];
 }

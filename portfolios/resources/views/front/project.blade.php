@@ -6,7 +6,7 @@
 @section('content')
 <div id="centre" class="p-6 bg-gray-800 rounded-lg">
     <h1 class="titre text-4xl font-bold text-center mb-6">{{ $project->title }}</h1>
-    <p class="text-lg leading-relaxed mb-6">{{ $project->description }}</p>
+    <p class="text-lg leading-relaxed mb-6">{!!$project->description!!}</p>
 
     @if($project->tasks)
     <div id="part1" class="mb-6">
