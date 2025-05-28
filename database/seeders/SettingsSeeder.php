@@ -17,14 +17,10 @@ class SettingsSeeder extends Seeder
         DB::table('settings')->truncate();
         Setting::create(['key' => 'x', 'value' => 'https://twitter.com/GameBlackRC', 'user_id' => 1]);
         Setting::create(['key' => 'instagram', 'value' => 'https://www.instagram.com/gameblackrc/', 'user_id' => 1]);
-        Setting::create(['key' => 'youtube', 'value' => 'https://www.youtube.com/channel/UChBImNicxtKOVsTjSfpf6kw', 'user_id' => 1]);
-        Setting::create(['key' => 'discord', 'value' => 'https://discord.gg/bfwQWHU', 'user_id' => 1]);
         Setting::create(['key' => 'github', 'value' => 'https://github.com/GameBlackRC', 'user_id' => 1]);
 
         Setting::create(['key' => 'x', 'value' => null, 'user_id' => 2]);
         Setting::create(['key' => 'instagram', 'value' => null, 'user_id' => 2]);
-        Setting::create(['key' => 'youtube', 'value' => null, 'user_id' => 2]);
-        Setting::create(['key' => 'discord', 'value' => null, 'user_id' => 2]);
         Setting::create(['key' => 'github', 'value' => null, 'user_id' => 2]);
     }
 }

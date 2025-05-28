@@ -12,7 +12,6 @@ class AdminController extends Controller
 {
     public function settings()
     {
-
         $settings = auth()->user()->settings()->get();
         return view('backoffice.settings.index', compact('settings'));
     }
@@ -20,9 +19,13 @@ class AdminController extends Controller
     public function updateSettings(Request $request)
     {
         $data = $request->except('_token');
+        $userId = auth()->user()->id;
 
         foreach ($data as $key => $value) {
-            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+            Setting::updateOrCreate(
+                ['user_id' => $userId, 'key' => $key],
+                ['value' => $value]
+            );
         }
 
         return redirect()->back()->with('success', 'Paramètres mis à jour avec succès.');
@@ -32,14 +35,30 @@ class AdminController extends Controller
     {
         $user = auth()->user();
 
-        // On suppose que la table visitor_statistics a une colonne user_id
+        $statisticsByDate = \App\Models\VisitorStatistic::where('user_id', $user->id)
+            ->selectRaw('DATE(visited_at) as date, COUNT(*) as visits')
+            ->groupBy('date')
+            ->orderBy('date', 'desc')
+            ->get();
+
         $statistics = \App\Models\VisitorStatistic::where('user_id', $user->id)
             ->selectRaw('DATE(visited_at) as date, COUNT(*) as visits')
             ->groupBy('date')
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('backoffice.statistics', compact('statistics'));
+        $uniqueVisitors = $statistics->unique('ip_address')->count();
+
+        //Nombre de pages visitées par utilisateur
+        $pagesVisited = \App\Models\VisitorStatistic::where('user_id', $user->id)
+            ->selectRaw('COUNT(DISTINCT url) as pages_visited, ip_address')
+            ->groupBy('ip_address')
+            ->get();
+
+        //Moyenne de pages visitées par utilisateur
+
+
+        return view('backoffice.statistics', compact('statisticsByDate', 'uniqueVisitors', 'pagesVisited'));
     }
 
     public function dashboard()

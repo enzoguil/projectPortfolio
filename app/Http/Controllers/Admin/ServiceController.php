@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
 
@@ -29,18 +26,12 @@ class ServiceController extends Controller
         return view('backoffice.services.index', compact('services'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $user = auth()->user();
         return view('backoffice.services.create', compact('user'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -54,26 +45,12 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service ajouté avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $service = Service::findOrFail($id);
         return view('backoffice.services.edit', compact('service'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -88,9 +65,6 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $service = Service::findOrFail($id);

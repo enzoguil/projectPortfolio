@@ -8,9 +8,6 @@ use App\Models\Project;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = auth()->user()->projects();
@@ -28,18 +25,12 @@ class ProjectController extends Controller
         return view('backoffice.projects.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $user = auth()->user();
         return view('backoffice.projects.create', compact('user'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -57,26 +48,12 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Projet ajouté avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $project = Project::findOrFail($id);
         return view('backoffice.projects.edit', compact('project'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -95,9 +72,6 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Projet mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $project = Project::findOrFail($id);

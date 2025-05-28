@@ -1,19 +1,15 @@
 <?php
-// filepath: app/Http/Controllers/HomeController.php
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\LogVisitor;
 use Illuminate\Support\Facades\Http;
-use App\Models\Project;
 use App\Models\User;
-use GPBMetadata\Google\Api\Log;
 
 class HomeController extends Controller
 {
     public function index($userId)
     {
         (new LogVisitor())->handle(request(), function ($request) {
-            // You can add logic here if needed, or simply return $request
             return $request;
         });
         $user = User::findOrFail($userId);
@@ -31,7 +27,6 @@ class HomeController extends Controller
     public function projects($userId)
     {
         (new LogVisitor())->handle(request(), function ($request) {
-            // You can add logic here if needed, or simply return $request
             return $request;
         });
         $user = User::findOrFail($userId);
@@ -41,7 +36,6 @@ class HomeController extends Controller
         $youtube = $settings->where('key', 'youtube')->value('value');
         $discord = $settings->where('key', 'discord')->value('value');
         $github = $settings->where('key', 'github')->value('value');
-        // Appeler l'API pour récupérer tous les projets
         $query = $user->projects();
 
         if (request()->filled('search')) {
@@ -84,7 +78,6 @@ class HomeController extends Controller
         $youtube = $settings->where('key', 'youtube')->value('value');
         $discord = $settings->where('key', 'discord')->value('value');
         $github = $settings->where('key', 'github')->value('value');
-        // Appeler l'API pour récupérer les compétences
         $skills = Http::get('https://api.example.com/skills')->json();
 
         return view('front.skills', compact('user', 'skills', 'x', 'instagram', 'youtube', 'discord', 'github'));

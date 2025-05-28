@@ -17,7 +17,6 @@ Route::get('/portfolio/{userId}/projects/{id}', [HomeController::class, 'show'])
 Route::get('/portfolio/{userId}/skills', [HomeController::class, 'skills'])->name('skills');
 Route::get('/portfolio/{userId}/services', [HomeController::class, 'services']);
 
-// Routes pour le back-office des projets
 Route::middleware(['auth'])->prefix('backoffice')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('projects', ProjectController::class);
