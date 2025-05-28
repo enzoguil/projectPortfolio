@@ -14,10 +14,7 @@ services:
                 condition: on-failure
 
     php:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: laravel-php
+        image: gameblack/laravel-php:latest
         restart: unless-stopped
         volumes:
             - ./portfolios:/app
