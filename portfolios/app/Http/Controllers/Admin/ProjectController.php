@@ -14,7 +14,7 @@ class ProjectController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
             });

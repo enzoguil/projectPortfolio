@@ -1,11 +1,9 @@
 <?php
 
-// filepath: app/Http/Controllers/API/ProjectController.php
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-
 
 /**
  * @OA\Tag(

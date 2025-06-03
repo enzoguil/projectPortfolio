@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    public function index(Request $request)
+    public function index (Request $request)
     {
 
         $query = auth()->user()->services();
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
             });
@@ -26,13 +26,13 @@ class ServiceController extends Controller
         return view('backoffice.services.index', compact('services'));
     }
 
-    public function create()
+    public function create ()
     {
         $user = auth()->user();
         return view('backoffice.services.create', compact('user'));
     }
 
-    public function store(Request $request)
+    public function store (Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -45,13 +45,13 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service ajouté avec succès.');
     }
 
-    public function edit(string $id)
+    public function edit (string $id)
     {
         $service = Service::findOrFail($id);
         return view('backoffice.services.edit', compact('service'));
     }
 
-    public function update(Request $request, string $id)
+    public function update (Request $request, string $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -65,7 +65,7 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service mis à jour avec succès.');
     }
 
-    public function destroy(string $id)
+    public function destroy (string $id)
     {
         $service = Service::findOrFail($id);
         $service->delete();
