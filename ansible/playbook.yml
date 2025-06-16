@@ -9,6 +9,7 @@
           - php
           - composer
           - rsync
+          - php-xml
         state: present
         update_cache: yes
 
