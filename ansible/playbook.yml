@@ -11,17 +11,10 @@
         state: present
         update_cache: yes
 
-    - name: Déployer le build front
+    - name: Copier l'application sur le VPS
       synchronize:
-        src: ../portfolios/dist/
-        dest: /var/www/html/
-        recursive: yes
-        delete: yes
-
-    - name: Déployer le dossier public Laravel
-      synchronize:
-        src: ../portfolios/public/
-        dest: /var/www/html/
+        src: ../portfolios/
+        dest: /var/www/portfolios/
         recursive: yes
         delete: yes
 
@@ -30,3 +23,36 @@
         name: apache2
         state: started
         enabled: yes
+
+    - name: Créer le VirtualHost Apache pour portfolios
+      copy:
+        dest: /etc/apache2/sites-available/portfolios.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin webmaster@localhost
+              DocumentRoot /var/www/portfolios/public
+              <Directory /var/www/portfolios/public>
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+          </VirtualHost>
+
+    - name: Désactiver le site par défaut
+      command: a2dissite 000-default.conf
+      notify: Reload Apache
+
+    - name: Activer le site portfolios
+      command: a2ensite portfolios.conf
+      notify: Reload Apache
+
+    - name: Activer mod_rewrite
+      command: a2enmod rewrite
+      notify: Reload Apache
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded

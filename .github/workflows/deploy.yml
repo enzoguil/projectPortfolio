@@ -1,4 +1,4 @@
-name: PHP_CodeSniffer
+name: Deploy App
 
 on:
   push:
@@ -37,6 +37,9 @@ jobs:
           npm ci
           npm run build
         working-directory: portfolios
+
+      - name: Lister le contenu du build
+        run: ls -l portfolios/dist || ls -l portfolios/public
 
       - name: Set up Python
         uses: actions/setup-python@v5
