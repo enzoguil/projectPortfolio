@@ -1,0 +1,24 @@
+---
+- hosts: web
+  become: yes
+  tasks:
+    - name: Installer Apache et PHP
+      apt:
+        name:
+          - apache2
+          - php
+        state: present
+        update_cache: yes
+
+    - name: Copier l'application sur le VPS
+      synchronize:
+        src: ../portfolios/
+        dest: /var/www/html/portfolios/
+        recursive: yes
+        delete: yes
+
+    - name: S'assurer qu'Apache est démarré
+      service:
+        name: apache2
+        state: started
+        enabled: yes

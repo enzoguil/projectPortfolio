@@ -11,6 +11,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function index (Request $request)
 =======
+    public function index(Request $request)
 >>>>>>> Stashed changes
     {
 
@@ -32,6 +33,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function create ()
 =======
+    public function create()
 >>>>>>> Stashed changes
     {
         $user = auth()->user();
@@ -41,6 +43,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function store (Request $request)
 =======
+    public function store(Request $request)
 >>>>>>> Stashed changes
     {
         $request->validate([
@@ -57,6 +60,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function edit (string $id)
 =======
+    public function edit(string $id)
 >>>>>>> Stashed changes
     {
         $service = Service::findOrFail($id);
@@ -66,6 +70,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function update (Request $request, string $id)
 =======
+    public function update(Request $request, string $id)
 >>>>>>> Stashed changes
     {
         $request->validate([
@@ -83,6 +88,7 @@ class ServiceController extends Controller
 <<<<<<< Updated upstream
     public function destroy (string $id)
 =======
+    public function destroy(string $id)
 >>>>>>> Stashed changes
     {
         $service = Service::findOrFail($id);

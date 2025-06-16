@@ -19,3 +19,31 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: php phpcs.phar --standard=PSR12 ./portfolios
         continue-on-error: true
+
+  deploy:
+    needs: phpcs
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook -i ansible/inventory ansible/playbook.yml \
+            --extra-vars "ansible_user=${{ secrets.VPS_USER }} ansible_host=${{ secrets.VPS_HOST }} ansible_port=${{ secrets.VPS_PORT }} ansible_ssh_pass=${{ secrets.VPS_PASS }}"
