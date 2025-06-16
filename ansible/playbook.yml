@@ -2,37 +2,47 @@
 - hosts: web
   become: yes
   tasks:
-    - name: Installer les dépendances système
+    - name: Installer Apache, PHP, Composer et rsync
       apt:
         name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
+          - apache2
+          - php
+          - composer
+          - rsync
         state: present
         update_cache: yes
 
-    - name: Installer Docker
-      shell: |
-        curl -fsSL https://get.docker.com | sh
-      args:
-        creates: /usr/bin/docker
-
-    - name: Installer Docker Compose
-      shell: |
-        curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
-      args:
-        creates: /usr/local/bin/docker-compose
-
-    - name: Copier les fichiers de l'application sur le VPS
+    - name: Copier l'application sur le VPS
       synchronize:
-        src: ../
-        dest: /srv/portfolio/
+        src: ../portfolios/
+        dest: /var/www/html/
         recursive: yes
         delete: yes
 
-    - name: Lancer l'application avec Docker Compose
-      shell: docker-compose up -d
+    - name: Installer les dépendances PHP avec Composer
+      command: composer install --no-interaction --prefer-dist --optimize-autoloader
       args:
-        chdir: /srv/portfolio/
+        chdir: /var/www/html
+
+    - name: Créer le VirtualHost Apache pour la racine
+      copy:
+        dest: /etc/apache2/sites-available/000-default.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin webmaster@localhost
+              DocumentRoot /var/www/html/public
+              <Directory /var/www/html/public>
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+          </VirtualHost>
+
+    - name: Activer mod_rewrite
+      command: a2enmod rewrite
+
+    - name: Redémarrer Apache
+      service:
+        name: apache2
+        state: restarted
