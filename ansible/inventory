@@ -1,2 +1,0 @@
-[web]
-vps ansible_host={{ ansible_host }} ansible_user={{ ansible_user }} ansible_port={{ ansible_port }}
