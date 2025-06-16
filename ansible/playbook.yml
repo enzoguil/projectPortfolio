@@ -2,11 +2,12 @@
 - hosts: web
   become: yes
   tasks:
-    - name: Installer Apache et PHP
+    - name: Installer Apache, PHP et rsync
       apt:
         name:
           - apache2
           - php
+          - rsync
         state: present
         update_cache: yes
 
