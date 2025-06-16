@@ -2,57 +2,37 @@
 - hosts: web
   become: yes
   tasks:
-    - name: Installer Apache, PHP et rsync
+    - name: Installer les dépendances système
       apt:
         name:
-          - apache2
-          - php
-          - rsync
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
         state: present
         update_cache: yes
 
-    - name: Copier l'application sur le VPS
+    - name: Installer Docker
+      shell: |
+        curl -fsSL https://get.docker.com | sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Installer Docker Compose
+      shell: |
+        curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+
+    - name: Copier les fichiers de l'application sur le VPS
       synchronize:
-        src: ../portfolios/
-        dest: /var/www/portfolios/
+        src: ../
+        dest: /srv/portfolio/
         recursive: yes
         delete: yes
 
-    - name: S'assurer qu'Apache est démarré
-      service:
-        name: apache2
-        state: started
-        enabled: yes
-
-    - name: Créer le VirtualHost Apache pour portfolios
-      copy:
-        dest: /etc/apache2/sites-available/portfolios.conf
-        content: |
-          <VirtualHost *:80>
-              ServerAdmin webmaster@localhost
-              DocumentRoot /var/www/portfolios
-              <Directory /var/www/portfolios>
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-          </VirtualHost>
-
-    - name: Désactiver le site par défaut
-      command: a2dissite 000-default.conf
-      notify: Reload Apache
-
-    - name: Activer le site portfolios
-      command: a2ensite portfolios.conf
-      notify: Reload Apache
-
-    - name: Activer mod_rewrite
-      command: a2enmod rewrite
-      notify: Reload Apache
-
-  handlers:
-    - name: Reload Apache
-      service:
-        name: apache2
-        state: reloaded
+    - name: Lancer l'application avec Docker Compose
+      shell: docker-compose up -d
+      args:
+        chdir: /srv/portfolio/
