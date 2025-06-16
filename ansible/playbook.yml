@@ -30,8 +30,8 @@
         content: |
           <VirtualHost *:80>
               ServerAdmin webmaster@localhost
-              DocumentRoot /var/www/portfolios/public
-              <Directory /var/www/portfolios/public>
+              DocumentRoot /var/www/portfolios
+              <Directory /var/www/portfolios>
                   AllowOverride All
                   Require all granted
               </Directory>
