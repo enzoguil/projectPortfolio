@@ -28,6 +28,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Installer les dépendances PHP
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Installer les dépendances Node.js
+        run: |
+          npm ci
+          npm run build
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

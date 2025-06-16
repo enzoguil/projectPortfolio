@@ -11,10 +11,17 @@
         state: present
         update_cache: yes
 
-    - name: Copier l'application sur le VPS
+    - name: Déployer le build front
       synchronize:
-        src: ../portfolios/
-        dest: /var/www/html/portfolios/
+        src: ../portfolios/dist/
+        dest: /var/www/html/
+        recursive: yes
+        delete: yes
+
+    - name: Déployer le dossier public Laravel
+      synchronize:
+        src: ../portfolios/public/
+        dest: /var/www/html/
         recursive: yes
         delete: yes
 
