@@ -2,10 +2,11 @@
 - hosts: web
   become: yes
   tasks:
-    - name: Installer Apache, PHP, Composer et rsync
+    - name: Installer Nginx, PHP-FPM, Composer et extensions nécessaires
       apt:
         name:
-          - apache2
+          - nginx
+          - php-fpm
           - php
           - composer
           - rsync
@@ -25,25 +26,34 @@
       args:
         chdir: /var/www/html
 
-    - name: Créer le VirtualHost Apache pour la racine
+    - name: Configurer Nginx pour servir l'app Laravel
       copy:
-        dest: /etc/apache2/sites-available/000-default.conf
+        dest: /etc/nginx/sites-available/default
         content: |
-          <VirtualHost *:80>
-              ServerAdmin webmaster@localhost
-              DocumentRoot /var/www/html/public
-              <Directory /var/www/html/public>
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-          </VirtualHost>
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+              root /var/www/html/public;
+              index index.php index.html index.htm;
+              server_name _;
+              location / {
+                  try_files $uri $uri/ /index.php?$query_string;
+              }
+              location ~ \.php$ {
+                  include snippets/fastcgi-php.conf;
+                  fastcgi_pass unix:/var/run/php/php-fpm.sock;
+              }
+              location ~ /\.ht {
+                  deny all;
+              }
+          }
 
-    - name: Activer mod_rewrite
-      command: a2enmod rewrite
-
-    - name: Redémarrer Apache
+    - name: Redémarrer Nginx
       service:
-        name: apache2
+        name: nginx
         state: restarted
+
+    - name: S'assurer que PHP-FPM est démarré
+      service:
+        name: php*-fpm
+        state: started
