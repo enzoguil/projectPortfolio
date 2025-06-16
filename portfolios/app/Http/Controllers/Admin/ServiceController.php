@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
+<<<<<<< Updated upstream
     public function index (Request $request)
+=======
+>>>>>>> Stashed changes
     {
 
         $query = auth()->user()->services();
@@ -26,13 +29,19 @@ class ServiceController extends Controller
         return view('backoffice.services.index', compact('services'));
     }
 
+<<<<<<< Updated upstream
     public function create ()
+=======
+>>>>>>> Stashed changes
     {
         $user = auth()->user();
         return view('backoffice.services.create', compact('user'));
     }
 
+<<<<<<< Updated upstream
     public function store (Request $request)
+=======
+>>>>>>> Stashed changes
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -45,13 +54,19 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service ajouté avec succès.');
     }
 
+<<<<<<< Updated upstream
     public function edit (string $id)
+=======
+>>>>>>> Stashed changes
     {
         $service = Service::findOrFail($id);
         return view('backoffice.services.edit', compact('service'));
     }
 
+<<<<<<< Updated upstream
     public function update (Request $request, string $id)
+=======
+>>>>>>> Stashed changes
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -65,7 +80,10 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service mis à jour avec succès.');
     }
 
+<<<<<<< Updated upstream
     public function destroy (string $id)
+=======
+>>>>>>> Stashed changes
     {
         $service = Service::findOrFail($id);
         $service->delete();
