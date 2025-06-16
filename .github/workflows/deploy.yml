@@ -39,9 +39,6 @@ jobs:
       - name: Run Ansible Playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
-          ansible_host: ${{ secrets.VPS_HOST }}
-          ansible_user: ${{ secrets.VPS_USER }}
-          ansible_port: ${{ secrets.VPS_PORT }}
-          ansible_ssh_pass: ${{ secrets.VPS_PASS }}
         run: |
-          ansible-playbook -i ansible/inventory ansible/playbook.yml
+          ansible-playbook -i ansible/inventory ansible/playbook.yml \
+            --extra-vars "ansible_host=${{ secrets.VPS_HOST }} ansible_user=${{ secrets.VPS_USER }} ansible_port=${{ secrets.VPS_PORT }} ansible_ssh_pass=${{ secrets.VPS_PASS }}"
