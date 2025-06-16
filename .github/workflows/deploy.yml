@@ -30,11 +30,13 @@ jobs:
 
       - name: Installer les dépendances PHP
         run: composer install --no-dev --optimize-autoloader
+        working-directory: portfolios
 
       - name: Installer les dépendances Node.js
         run: |
           npm ci
           npm run build
+        working-directory: portfolios
 
       - name: Set up Python
         uses: actions/setup-python@v5
