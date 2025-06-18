@@ -69,5 +69,29 @@
         groups: docker
         append: yes
 
+    - name: Stop Apache if running
+      service:
+        name: apache2
+        state: stopped
+      ignore_errors: yes
+
+    - name: Disable Apache at boot
+      service:
+        name: apache2
+        enabled: no
+      ignore_errors: yes
+
+    - name: Stop Nginx if running
+      service:
+        name: nginx
+        state: stopped
+      ignore_errors: yes
+
+    - name: Disable Nginx at boot
+      service:
+        name: nginx
+        enabled: no
+      ignore_errors: yes
+
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
