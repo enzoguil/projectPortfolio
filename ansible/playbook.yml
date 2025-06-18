@@ -24,7 +24,6 @@
       copy:
         dest: /home/{{ ansible_user }}/docker-compose.yml
         content: |
-          version: '3.8'
           services:
             app:
               image: laravelsail/php82-composer
@@ -63,6 +62,12 @@
                   include fastcgi_params;
               }
           }
+
+    - name: Ajouter l'utilisateur au groupe docker
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
 
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
