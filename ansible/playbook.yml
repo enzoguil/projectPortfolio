@@ -121,5 +121,12 @@
         - storage
         - bootstrap/cache
 
+    - name: Corriger les droits sur database.sqlite
+      file:
+        path: /var/www/html/database/database.sqlite
+        owner: www-data
+        group: www-data
+        mode: '0666'
+
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
