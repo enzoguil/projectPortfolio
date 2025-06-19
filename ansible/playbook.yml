@@ -13,12 +13,14 @@
         name: docker-compose
         state: present
 
-    - name: Copier l'application sur le VPS
+    - name: Copier l'application sur le VPS (en ignorant .env)
       synchronize:
         src: ../portfolios/
         dest: /var/www/html/
         recursive: yes
         delete: yes
+        rsync_opts:
+          - "--exclude=.env"
 
     - name: Copier le docker-compose.yml
       copy:
