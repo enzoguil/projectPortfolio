@@ -21,6 +21,7 @@
         delete: yes
         rsync_opts:
           - "--exclude=.env"
+          - "--exclude=vendor"
 
     - name: Copier le docker-compose.yml
       copy:
@@ -96,6 +97,3 @@
 
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
-
-    - name: Installer les dépendances Laravel dans le conteneur
-      shell: docker exec laravel_app composer install
