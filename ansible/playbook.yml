@@ -97,3 +97,6 @@
 
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
+
+    - name: Installer les dépendances Laravel dans le conteneur
+      shell: docker exec laravel_app composer install

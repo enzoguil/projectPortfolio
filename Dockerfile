@@ -1,11 +1,8 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.2-fpm
 
-RUN apk add --no-cache \
-        sqlite-dev \
-        nodejs \
-        npm \
-    && docker-php-ext-install pdo pdo_sqlite
+RUN apt-get update \
+    && apt-get install -y git unzip libzip-dev libpng-dev libonig-dev libxml2-dev zip \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+WORKDIR /var/www/html
