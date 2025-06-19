@@ -28,12 +28,11 @@
         content: |
           services:
             app:
-              image: laravelsail/php82-composer
+              image: php:8.2-fpm
               container_name: laravel_app
               working_dir: /var/www/html
               volumes:
                 - /var/www/html:/var/www/html
-              command: bash -c "composer install && php-fpm"
             nginx:
               image: nginx:alpine
               container_name: nginx
