@@ -79,17 +79,5 @@
     - name: Corriger les droits sur bootstrap/cache dans le conteneur
       shell: docker exec laravel_app chown -R www-data:www-data /var/www/html/bootstrap/cache && docker exec laravel_app chmod -R 777 /var/www/html/bootstrap/cache
 
-    - name: Corriger les droits sur le dossier database sur l'hôte
-      file:
-        path: /var/www/html/database
-        owner: www-data
-        group: www-data
-        mode: '0777'
-        recurse: yes
-
-    - name: Corriger les droits sur database.sqlite sur l'hôte
-      file:
-        path: /var/www/html/database/database.sqlite
-        owner: www-data
-        group: www-data
-        mode: '0666'
+    - name: Corriger les droits sur database.sqlite dans le conteneur
+      shell: docker exec laravel_app chown www-data:www-data /var/www/html/database/database.sqlite && docker exec laravel_app chmod 666 /var/www/html/database/database.sqlite
