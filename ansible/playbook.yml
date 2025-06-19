@@ -22,7 +22,6 @@
         rsync_opts:
           - "--exclude=.env"
           - "--exclude=vendor"
-          - "--exclude=database/database.sqlite"
     - name: Copier le docker-compose.yml
       copy:
         dest: /home/{{ ansible_user }}/docker-compose.yml
