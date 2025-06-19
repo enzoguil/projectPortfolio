@@ -14,12 +14,12 @@ class LogVisitor
         $userId = $request->route('userId');
 
         // Enregistrer la visite
-        VisitorStatistic::create([
-            'user_id' => $userId,
-            'ip_address' => $request->ip(),
-            'url' => $request->fullUrl(),
-            'visited_at' => now(),
-        ]);
+        // VisitorStatistic::create([
+        //     'user_id' => $userId,
+        //     'ip_address' => $request->ip(),
+        //     'url' => $request->fullUrl(),
+        //     'visited_at' => now(),
+        // ]);
 
         return $next($request);
     }
