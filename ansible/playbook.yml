@@ -71,62 +71,14 @@
         groups: docker
         append: yes
 
-    - name: Stop Apache if running
-      service:
-        name: apache2
-        state: stopped
-      ignore_errors: yes
-
-    - name: Disable Apache at boot
-      service:
-        name: apache2
-        enabled: no
-      ignore_errors: yes
-
-    - name: Stop Nginx if running
-      service:
-        name: nginx
-        state: stopped
-      ignore_errors: yes
-
-    - name: Disable Nginx at boot
-      service:
-        name: nginx
-        enabled: no
-      ignore_errors: yes
-
-    - name: Corriger les droits sur storage
-      file:
-        path: /var/www/html/storage
-        state: directory
-        recurse: yes
-        mode: '0777'
-
-    - name: Corriger les droits sur bootstrap/cache
-      file:
-        path: /var/www/html/bootstrap/cache
-        state: directory
-        recurse: yes
-        mode: '0777'
-
-    - name: Corriger le propriétaire de storage et bootstrap/cache
-      file:
-        path: /var/www/html/{{ item }}
-        state: directory
-        recurse: yes
-        owner: www-data
-        group: www-data
-        mode: '0777'
-      loop:
-        - storage
-        - bootstrap/cache
-
-    - name: Corriger les droits sur database.sqlite
-      file:
-        path: /var/www/html/database/database.sqlite
-        owner: www-data
-        group: www-data
-        mode: '0666'
-
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
+
+    - name: Corriger les droits sur storage dans le conteneur
+      shell: docker exec laravel_app chown -R www-data:www-data /var/www/html/storage && docker exec laravel_app chmod -R 777 /var/www/html/storage
+
+    - name: Corriger les droits sur bootstrap/cache dans le conteneur
+      shell: docker exec laravel_app chown -R www-data:www-data /var/www/html/bootstrap/cache && docker exec laravel_app chmod -R 777 /var/www/html/bootstrap/cache
+
+    - name: Corriger les droits sur database.sqlite dans le conteneur
+      shell: docker exec laravel_app chown www-data:www-data /var/www/html/database/database.sqlite && docker exec laravel_app chmod 666 /var/www/html/database/database.sqlite
