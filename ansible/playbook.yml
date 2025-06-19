@@ -95,5 +95,19 @@
         enabled: no
       ignore_errors: yes
 
+    - name: Corriger les droits sur storage
+      file:
+        path: /var/www/html/storage
+        state: directory
+        recurse: yes
+        mode: '0777'
+
+    - name: Corriger les droits sur bootstrap/cache
+      file:
+        path: /var/www/html/bootstrap/cache
+        state: directory
+        recurse: yes
+        mode: '0777'
+
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
