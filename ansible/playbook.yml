@@ -13,7 +13,7 @@
         name: docker-compose
         state: present
 
-    - name: Copier l'application sur le VPS (en ignorant .env)
+    - name: Copier l'application sur le VPS
       synchronize:
         src: ../portfolios/
         dest: /var/www/html/
@@ -22,7 +22,7 @@
         rsync_opts:
           - "--exclude=.env"
           - "--exclude=vendor"
-
+          - "--exclude=database/database.sqlite"
     - name: Copier le docker-compose.yml
       copy:
         dest: /home/{{ ansible_user }}/docker-compose.yml
@@ -108,6 +108,18 @@
         state: directory
         recurse: yes
         mode: '0777'
+
+    - name: Corriger le propriétaire de storage et bootstrap/cache
+      file:
+        path: /var/www/html/{{ item }}
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: www-data
+        mode: '0777'
+      loop:
+        - storage
+        - bootstrap/cache
 
     - name: Lancer la stack Docker
       shell: docker compose -f /home/{{ ansible_user }}/docker-compose.yml up -d
